@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found — Bookshop{% endblock %}
+
+{% block content %}
+<div style="text-align:center; padding: 80px 20px;">
+    <h1 style="font-size: 3rem;">404</h1>
+    <p style="color: var(--text-muted); margin-bottom: 24px;">
+        This page doesn't exist — maybe the book wandered off the shelf.
+    </p>
+    <a href="{% url 'store:home' %}" class="btn">Back to Home</a>
+</div>
+{% endblock %}

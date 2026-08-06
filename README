@@ -1,0 +1,73 @@
+# 📖 Bookshop — Django Online Bookstore
+
+A minimal, elegant online bookstore built with Django. Features product
+browsing, search, category filtering, and a light/dark theme toggle.
+
+<!--![Bookshop screenshot](docs/screenshot-home.png)-->
+
+## Features
+
+- Browse books by category
+- Search books by title
+- Book detail pages with related book suggestions
+- Light / dark mode with saved user preference
+- Responsive design
+- Django admin panel for managing inventory
+
+## Tech Stack
+
+- Python 3.x, Django
+- SQLite (dev) 
+- Pipenv for dependency management
+- Vanilla CSS (custom properties for theming) + vanilla JS
+
+## Getting Started
+
+1. Clone the repo:
+```bash
+   git clone https://github.com/ELLHAMRJB/bookshop.git
+   cd bookshop
+```
+
+2. Install dependencies:
+```bash
+   pipenv install
+   pipenv shell
+```
+
+3. Set up environment variables:
+```bash
+   cp .env.example .env
+```
+   Then edit `.env` and add your own `SECRET_KEY`.
+
+4. Run migrations and load sample data:
+```bash
+   python manage.py migrate
+   python manage.py loaddata store/fixtures/initial_data.json
+```
+
+5. Create an admin user (optional):
+```bash
+   python manage.py createsuperuser
+```
+
+6. Run the server:
+```bash
+   python manage.py runserver
+```
+
+Visit `http://127.0.0.1:8000/`.
+
+## What I learned building this
+
+- Structuring a Django project with reusable templates and slug-based URLs
+- Managing environment variables and secrets properly with django-environ
+- Building a theme system with CSS custom properties and localStorage
+- Writing clean, filterable querysets for search and category filtering
+
+## Roadmap
+
+- [ ] Shopping cart and checkout
+- [ ] User accounts and order history
+- [ ] REST API with Django REST Framework

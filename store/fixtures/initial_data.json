@@ -1,0 +1,27 @@
+[
+{
+  "model": "store.category",
+  "pk": 1,
+  "fields": {
+    "name": "Romantic Fiction",
+    "slug": "romantic-fiction"
+  }
+},
+{
+  "model": "store.book",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "title": "Pride and Prejudice",
+    "slug": "pride-and-prejudice",
+    "author": "Jane Austen",
+    "description": "Pride and Prejudice is a novel of manners by Jane Austen, first published in 1813. The story follows the main character, Elizabeth Bennet, as she deals with issues of manners, upbringing, morality, education, and marriage in the society of the landed gentry of the British Regency.",
+    "price": "15.99",
+    "cover": "covers/2.jpg",
+    "stock": 10,
+    "is_available": true,
+    "created_at": "2026-08-04T19:06:30.884Z",
+    "updated_at": "2026-08-06T14:23:48.091Z"
+  }
+}
+]
