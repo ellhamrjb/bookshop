@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.name }} — Bookshop{% endblock %}
+
+{% block content %}
+<h1>{{ category.name }}</h1>
+
+<div class="book-grid">
+    {% for book in books %}
+        <a href="{{ book.get_absolute_url }}" class="book-card">
+            {% if book.cover %}
+                <img src="{{ book.cover.url }}" alt="{{ book.title }}">
+            {% else %}
+                <div class="book-cover-placeholder">No Cover</div>
+            {% endif %}
+            <h3>{{ book.title }}</h3>
+            <p class="price">€{{ book.price }}</p>
+        </a>
+    {% empty %}
+        <p>No books in this category yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

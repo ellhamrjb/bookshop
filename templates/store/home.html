@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home — Bookshop{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Find your next favorite book</h1>
+    <p>Curated fiction, non-fiction, and everything in between.</p>
+    <a href="{% url 'store:book_list' %}" class="btn">Browse all books</a>
+</section>
+
+<section class="categories">
+    <h2>Categories</h2>
+    <div class="category-grid">
+        {% for category in categories %}
+            <a href="{% url 'store:category_detail' category.slug %}" class="category-card">
+                {{ category.name }}
+            </a>
+        {% empty %}
+            <p>No categories yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="featured">
+    <h2>Featured Books</h2>
+    <div class="book-grid">
+        {% for book in featured_books %}
+            <a href="{{ book.get_absolute_url }}" class="book-card">
+                {% if book.cover %}
+                    <img src="{{ book.cover.url }}" alt="{{ book.title }}">
+                {% else %}
+                    <div class="book-cover-placeholder">No Cover</div>
+                {% endif %}
+                <h3>{{ book.title }}</h3>
+                <p class="author">{{ book.author }}</p>
+                <p class="price">€{{ book.price }}</p>
+            </a>
+        {% empty %}
+            <p>No books yet — add some in the admin panel.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

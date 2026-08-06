@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} — Bookshop{% endblock %}
+
+{% block content %}
+<div class="book-detail">
+    <div class="book-detail-image">
+        {% if book.cover %}
+            <img src="{{ book.cover.url }}" alt="{{ book.title }}">
+        {% else %}
+            <div class="book-cover-placeholder large">No Cover</div>
+        {% endif %}
+    </div>
+
+    <div class="book-detail-info">
+        <h1>{{ book.title }}</h1>
+        <p class="author">by {{ book.author }}</p>
+        {% if book.category %}
+            <a href="{{ book.category.get_absolute_url }}" class="category-tag">{{ book.category.name }}</a>
+        {% endif %}
+        <p class="price large">€{{ book.price }}</p>
+
+        {% if book.in_stock %}
+            <p class="stock in-stock">✔ In stock ({{ book.stock }} available)</p>
+        {% else %}
+            <p class="stock out-of-stock">✘ Out of stock</p>
+        {% endif %}
+
+        <p class="description">{{ book.description }}</p>
+    </div>
+</div>
+
+{% if related_books %}
+<section class="related">
+    <h2>You might also like</h2>
+    <div class="book-grid">
+        {% for related in related_books %}
+            <a href="{{ related.get_absolute_url }}" class="book-card">
+                {% if related.cover %}
+                    <img src="{{ related.cover.url }}" alt="{{ related.title }}">
+                {% else %}
+                    <div class="book-cover-placeholder">No Cover</div>
+                {% endif %}
+                <h3>{{ related.title }}</h3>
+                <p class="price">€{{ related.price }}</p>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
