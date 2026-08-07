@@ -10,5 +10,8 @@ urlpatterns = [
     path('', include('store.urls', namespace='store')),
 ]
 
+#if settings.DEBUG:
+    #urlpatterns += static(settings.MEDIA_URL, document_root='settings.MEDIA_ROOT') #without it Django won't serve book cover images
+
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root='settings.MEDIA_ROOT') #without it Django won't serve book cover images
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
