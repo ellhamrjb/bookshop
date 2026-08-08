@@ -22,6 +22,11 @@
 
         {% if book.in_stock %}
             <p class="stock in-stock">✔ In stock ({{ book.stock }} available)</p>
+            <!--add to cart-->
+            <form action="{% url 'store:add_to_cart' book.id %}" method="POST" style="margin-top: 20px;">
+                {% csrf_token %}
+                <button type="submit" class="btn-add-to-cart">Add to Cart</button>
+            </form>
         {% else %}
             <p class="stock out-of-stock">✘ Out of stock</p>
         {% endif %}

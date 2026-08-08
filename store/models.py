@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -48,3 +49,47 @@ class Book(models.Model):
     @property
     def in_stock(self):
         return self.stock > 0
+
+
+
+class Cart(models.Model):
+    #for logins
+    user=models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='cart',
+        null=True,
+        blank=True,
+
+    )
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Cart of {self.user.username if self.user else "Anonymous"}"
+
+    @property
+    def total_price(self):
+        return sum(item.get_total_price() for item in self.items.all())
+
+
+
+class CartItem(models.Model):
+    #not logins
+    cart = models.ForeignKey(
+        Cart, 
+        on_delete=models.CASCADE, 
+        related_name="items"
+    )
+    book = models.ForeignKey(
+        Book, 
+        on_delete=models.CASCADE, 
+        related_name="cart_items"
+    )
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.book.title}"
+
+    def get_total_price(self):
+        return self.book.price * self.quantity
+

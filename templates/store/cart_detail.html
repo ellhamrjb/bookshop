@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Your Shopping Cart — Bookshop{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px 20px; max-width: 1000px; margin: 0 auto;">
+    <h1 style="margin-bottom: 30px; text-align: center;">Your Shopping Cart</h1>
+
+    {% if cart_items %}
+    <div class="cart-container">
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+            <thead>
+                <tr style="border-bottom: 2px solid #eee; text-align: left;">
+                    <th style="padding: 10px;">Book</th>
+                    <th style="padding: 10px;">Quantity</th>
+                    <th style="padding: 10px;">Unit Price</th>
+                    <th style="padding: 10px;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 15px 10px;">
+                        <div style="display: flex; align-items: center;">
+                            {% if item.book.cover %}
+                                <img src="{{ item.book.cover.url }}" alt="{{ item.book.title }}" style="width: 50px; height: 70px; object-fit: cover; margin-right: 15px; border-radius: 4px;">
+                            {% endif %}
+                            <span style="font-weight: bold;">{{ item.book.title }}</span>
+                        </div>
+                    </td>
+                    <td style="padding: 15px 10px;">{{ item.quantity }}</td>
+                    <td style="padding: 15px 10px;">${{ item.book.price }}</td>
+                    <td style="padding: 15px 10px;">
+                        {% if item.total_item_price %} 
+                            ${{ item.total_item_price }}
+                        {% else %}
+                            
+                            ${{ item.price }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="cart-summary" style="text-align: right; background: #f9f9f9; padding: 20px; border-radius: 8px;">
+            <h2 style="margin: 0;">Total Amount: <span style="color: #2c3e50;">${{ total_price }}</span></h2>
+            <div style="margin-top: 20px;">
+                <a href="{% url 'store:book_list' %}" style="text-decoration: none; color: #666; margin-right: 20px;">Continue Shopping</a>
+                <button class="btn-checkout" style="padding: 10px 25px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer;">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 50px 0;">
+        <h2 style="color: #999;">Your cart is empty.</h2>
+        <p>Looks like you haven't added any books yet.</p>
+        <br>
+        <a href="{% url 'store:book_list' %}" class="btn-add-to-cart" style="text-decoration: none; padding: 10px 20px; background: #2c3e50; color: white; border-radius: 4px;">Browse Books</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

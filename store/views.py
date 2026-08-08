@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Category, Book
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Category, Book, Cart, CartItem
 
 
 def home(request):
@@ -58,3 +58,55 @@ def category_detail(request, slug):
         "categories": categories,
     }
     return render(request, "store/category_detail.html", context)
+
+
+
+def add_to_cart(request, book_id):
+    book =get_object_or_404(Book, id=book_id, is_available=True)
+
+    if request.user.is_authenticated: #login
+        cart, created=Cart.objects.get_or_create(user=request.user)
+        cart_item, item_created = CartItem.objects.get_or_create(cart=cart, book=book)
+        if not item_created:
+            cart_item.quantity += 1
+            cart_item.save()
+    else:
+        #not login
+        cart = request.session.get('cart', {})
+        book_id_str = str(book_id)
+        if book_id_str in cart:
+            cart[book_id_str] += 1
+        else:
+            cart[book_id_str] = 1
+        request.session['cart'] = cart
+
+    return redirect('store:book_detail', slug=book.slug)
+
+def cart_detail(request):
+    cart_items = []
+    total_price = 0
+
+    if request.user.is_authenticated:
+        #show by database
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_items = cart.items.all()
+            total_price = sum(item.get_total_price() for item in cart_items)
+    else:
+        # show by session
+        session_cart = request.session.get('cart', {})
+        for b_id, quantity in session_cart.items():
+            book = Book.objects.get(id=int(b_id))
+            item_total = book.price * quantity 
+            total_price += item_total
+            cart_items.append({
+                'book': book,
+                'quantity': quantity,
+                'price': book.price,
+                'total_item_price': item_total              })
+
+    context = {
+        'cart_items': cart_items,
+        'total_price': total_price,
+    }
+    return render(request, 'store/cart_detail.html', context)
