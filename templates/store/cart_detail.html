@@ -15,6 +15,7 @@
                     <th style="padding: 10px;">Quantity</th>
                     <th style="padding: 10px;">Unit Price</th>
                     <th style="padding: 10px;">Total</th>
+                    <th style="padding: 10px;">Remove</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,15 +29,36 @@
                             <span style="font-weight: bold;">{{ item.book.title }}</span>
                         </div>
                     </td>
-                    <td style="padding: 15px 10px;">{{ item.quantity }}</td>
+                    <td style="padding: 15px 10px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <!--decrease button-->
+                            <form method="post" action="{% url 'store:decrease_cart_item' item.book.id %}" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" style="width: 30px; height: 30px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #fff;">−</button>
+                            </form>
+
+                            <span style="min-width: 20px; text-align: center;">{{ item.quantity }}</span>
+
+                            <!-- increase button   -->
+                            <form method="post" action="{% url 'store:increase_cart_item' item.book.id %}" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" style="width: 30px; height: 30px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #fff;">+</button>
+                            </form>
+                        </div>
+                    </td>
                     <td style="padding: 15px 10px;">${{ item.book.price }}</td>
                     <td style="padding: 15px 10px;">
                         {% if item.total_item_price %} 
                             ${{ item.total_item_price }}
                         {% else %}
-                            
                             ${{ item.price }}
                         {% endif %}
+                    </td>
+                    <td style="padding: 15px 10px;">
+                        <form method="post" action="{% url 'store:remove_cart_item' item.book.id %}">
+                            {% csrf_token %}
+                            <button type="submit" style="cursor: pointer; color: red; border: none; background: none; padding: 0;">🗑 Remove</button>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}

@@ -110,3 +110,64 @@ def cart_detail(request):
         'total_price': total_price,
     }
     return render(request, 'store/cart_detail.html', context)
+
+
+
+def update_cart_item(request, book_id, action):
+    #adjusting items
+    book= get_object_or_404(Book, id=book_id)
+
+    if request.user.is_authenticated:
+        #loggined users
+        cart, _=Cart.objects.get_or_create(user=request.user)
+        item=CartItem.objects.filter(cart=cart,book=book).first()
+
+        if item:
+            if action=='increase':
+                item.quantity+=1
+            elif action=='decrease':
+                item.quantity-=1
+
+
+            #for item=0
+            if item.quantity<1:
+                item.delete()
+            else:
+                item.save()
+    else:
+        #not loggined users
+        cart=request.sessio.get('cart',{})
+        key=str(book_id)
+
+        if key in cart:
+            if action=='increase':
+                cart[key]+=1
+            elif action=='decrease':
+                cart[key]-=1
+
+            #item=0
+            if cart[key]<1:
+                del cart[key]
+
+        request.session['cart']=cart
+        request.session.modified=True
+
+    return redirect('store:cart_detail')
+
+
+def remove_from_cart(request,book_id):
+    #Completely delete an item
+
+    if request.user.is_authenticated:
+        cart,_=Cart.objects.get_or_create(user=request.user)
+        CartItem.objects.filter(cart=cart,book_id=book_id).delete()
+
+    else:
+        cart = request.session.get('cart',{})
+        cart.pop(str(book_id),None)
+        request.session['cart']=cart
+        request.session.modified=True
+
+    return redirect('store:cart_detail')
+            
+

@@ -12,5 +12,10 @@ urlpatterns = [
     path('add-to-cart/<int:book_id>/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.cart_detail, name='cart_detail'),
 
+    #adjusting and deleting items
+    path('cart/increase/<int:book_id>/', views.update_cart_item, {'action': 'increase'}, name='increase_cart_item'),
+    path('cart/decrease/<int:book_id>/', views.update_cart_item, {'action': 'decrease'}, name='decrease_cart_item'),
+    path('cart/remove/<int:book_id>/', views.remove_from_cart, name='remove_cart_item'),
+
 
 ]
