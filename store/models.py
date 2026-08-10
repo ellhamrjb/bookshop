@@ -1,6 +1,16 @@
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.conf import settings 
+from django.contrib.auth.models import User, AbstractUser
+
+
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.username
+
+
 
 
 class Category(models.Model):
@@ -54,18 +64,18 @@ class Book(models.Model):
 
 class Cart(models.Model):
     #for logins
-    user=models.ForeignKey(
-        User,
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE,
         related_name='cart',
         null=True,
         blank=True,
 
     )
-    created_at=models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Cart of {self.user.username if self.user else "Anonymous"}"
+        return f"Cart of {self.user.username if self.user else 'Anonymous'}"
 
     @property
     def total_price(self):
