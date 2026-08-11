@@ -1,5 +1,41 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Book, Cart, CartItem
+from .models import Category, Book, Cart, CartItem, CustomUser
+from .forms import SignUpForm
+from django.contrib.auth import login, get_user_model
+#new
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password1')
+
+            
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+            
+            
+            login(request, user)
+            
+            
+            return redirect('home') 
+    else:
+        form = SignUpForm()
+    
+    
+    return render(request, 'store/signup.html', {'form': form})
+#end new
 
 
 def home(request):
