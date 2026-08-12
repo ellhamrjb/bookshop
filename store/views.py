@@ -29,7 +29,7 @@ def signup_view(request):
             login(request, user)
             
             
-            return redirect('home') 
+            return redirect('store:home') 
     else:
         form = SignUpForm()
     

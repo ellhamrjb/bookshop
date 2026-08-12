@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from . import views
 
 app_name = 'store' 
@@ -9,8 +10,17 @@ urlpatterns = [
     path('books/<slug:slug>/', views.book_detail, name='book_detail'),
     path('category/<slug:slug>/', views.category_detail, name='category_detail'),
 
+    
+
     #signup
-    path('signup/', views.signup_view, name='signup'),
+    path('signup/', views.signup_view, name='signup'), 
+    #path('signup/', views.signup, name='signup'),
+    #login
+    path('login/', auth_views.LoginView.as_view(template_name='store/login.html'), name='login'),
+    #logout
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
+
 
     path('add-to-cart/<int:book_id>/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.cart_detail, name='cart_detail'),
