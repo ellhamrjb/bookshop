@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %} Payment Gateway {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Checkout Summary</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Order ID: #{{ order.id }}</h5>
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Order Status:</strong></span>
+                        <span class="badge {% if order.status == 'pending' %}bg-warning text-dark{% elif order.status == 'paid' %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ order.status|upper }}
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Total Amount:</strong></span>
+                        <span class="text-primary font-weight-bold">${{ order.total_price }}</span>
+                    </div>
+
+                    <hr>
+                    <p class="text-muted small">
+                        Please select a payment method below to complete your purchase. 
+                        (This is a simulated payment gateway for testing purposes).
+                    </p>
+                </div>
+                
+                <div class="card-footer d-grid gap-2">
+                    <!-- Success Mock Button -->
+                    <a href="{% url 'store:payment_verify' order.id %}?result=ok" 
+                       class="btn btn-success btn-lg">
+                        ✅ Pay Successfully (Mock)
+                    </a>
+
+                    <!-- Failure Mock Button -->
+                    <a href="{% url 'store:payment_verify' order.id %}?result=nok" 
+                       class="btn btn-outline-danger">
+                        ❌ Cancel Payment
+                    </a>
+                    
+                    <a href="{% url 'store:cart_detail' %}" class="btn btn-link text-secondary">
+                        Back to Cart
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

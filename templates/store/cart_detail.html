@@ -67,10 +67,16 @@
 
         <div class="cart-summary" style="text-align: right; background: #f9f9f9; padding: 20px; border-radius: 8px;">
             <h2 style="margin: 0;">Total Amount: <span style="color: #2c3e50;">${{ total_price }}</span></h2>
-            <div style="margin-top: 20px;">
+            <!--<div style="margin-top: 20px;">
                 <a href="{% url 'store:book_list' %}" style="text-decoration: none; color: #666; margin-right: 20px;">Continue Shopping</a>
                 <button class="btn-checkout" style="padding: 10px 25px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer;">Proceed to Checkout</button>
-            </div>
+            </div>-->
+            <div style="margin-top: 20px;">
+    <a href="{% url 'store:book_list' %}" style="text-decoration: none; color: #666; margin-right: 20px;">Continue Shopping</a>
+    <a href="{% url 'store:checkout' %}" class="btn-checkout" style="text-decoration: none; display: inline-block; padding: 10px 25px; background: #2c3e50; color: white; border: none; border-radius: 4px;">
+        Proceed to Checkout
+    </a>
+</div>
         </div>
     </div>
     {% else %}
@@ -80,6 +86,8 @@
         <br>
         <a href="{% url 'store:book_list' %}" class="btn-add-to-cart" style="text-decoration: none; padding: 10px 20px; background: #2c3e50; color: white; border-radius: 4px;">Browse Books</a>
     </div>
+
+     <a href="{% url 'store:checkout' %}">Checkout</a>
     {% endif %}
 </div>
 {% endblock %}
