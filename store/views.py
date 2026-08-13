@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Book, Cart, CartItem, CustomUser
+from django.contrib import messages
+from .models import Category, Book, Cart, CartItem, CustomUser, Order, OrderItem
 from .forms import SignUpForm
 from django.contrib.auth import login, get_user_model
 #new
@@ -207,3 +208,64 @@ def remove_from_cart(request,book_id):
     return redirect('store:cart_detail')
             
 
+#new for ordering
+def checkout(request):
+    if not request.user.is_authenticated:
+        return redirect( 'store:login')
+
+
+    cart=Cart.objects.filter(user=request.user).first()
+    if not cart or not cart.items.exists():
+        messages.warning(request, 'Your cart is empty')
+        return redirect('store:cart_detail')
+
+    #pending status
+    order = Order.objects.create(
+        user=request.user,
+        total_price= cart.total_price,
+        status='pending',
+
+    )
+
+    #copy iems to orderitem -snapshot
+    for item in cart.items.all():
+        OrderItem.objects.create(
+            order=order,
+            book=item.book,
+            quantity=item.quantity,
+            price=item.book.price, #freeze the price
+        )
+
+    #emptying the shopping cart
+    cart.items.all().delete()
+
+    return redirect('store:payment_start', order_id =order.id)
+
+
+
+#Test Payment Gateway mock
+def payment_start(request, order_id):
+    order= get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'store/payment.html', {'order': order})
+
+
+#payment Gateway Simulation
+def payment_verify(request, order_id):
+
+    #mock: in real zarinpal , ZPAPI server will be, but here wejust show ot with result
+    #result=ok ? success       result=nok ? unseccess
+
+    order= get_object_or_404(Order, id= order_id, user=request.user)
+    result= request.GET.get('result')
+
+    if result == 'ok':
+        order.statsu= 'paid'
+        order.asave()
+        messages.success(request, 'Payment successful')
+    else:
+        order.statsu= 'failed'
+        order.save()
+        messages.error(request, 'Payment unseccussful. Try again')
+
+    return redirect('store:cart_detail')
+        
