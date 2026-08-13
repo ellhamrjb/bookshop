@@ -1,7 +1,9 @@
 from django.contrib import admin
-from.models import Category, Book
+from.models import Category, Book, CustomUser
+from django.contrib.auth.admin import UserAdmin
 
 
+admin.site.register(CustomUser,UserAdmin)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
