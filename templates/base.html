@@ -23,6 +23,12 @@
                         
                     </span>
                 </a>
+                <!-- در بخش Navbar -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'store:order_history' %}">My Orders</a>
+                </li>
+
+                
 
                 {% if user.is_authenticated %}
                     <span class="welcome">Hi, {{ user.username }} 👋</span>

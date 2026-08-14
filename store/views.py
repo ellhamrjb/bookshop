@@ -269,3 +269,29 @@ def payment_verify(request, order_id):
 
     return redirect('store:cart_detail')
         
+
+#order history
+def order_history(request):
+    #if not login
+    if not request.user.is_authenticated:
+        messages.error(request, 'You must be logged to view your order history')
+        return redirect("store: login")
+
+    #retrieve all orders for this user, sorted from newest to oldest
+    orders= Order.objects.filter(user=request.user).order_by("-created_at")
+
+    return render(request, 'store/order_history.html', {'orders':orders})
+
+
+#order detail
+def order_detail(request, order_id):
+    
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    
+    # get all the IDs
+    order_items = order.items.all() 
+    
+    return render(request, 'store/order_detail.html', {
+        'order': order,
+        'order_items': order_items
+    })
