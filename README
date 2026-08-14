@@ -5,11 +5,17 @@ browsing, search, category filtering, and a light/dark theme toggle.
 
 <!--![Bookshop screenshot](docs/screenshot-home.png)-->
 
+Status: MVP Completed ✅
+
 ## Features
+
 
 - Browse books by category
 - Search books by title
 - Book detail pages with related book suggestions
+- **Shopping cart system**
+- **Order placement and checkout process**
+- **User order history and detailed order tracking**
 - Light / dark mode with saved user preference
 - Responsive design
 - Django admin panel for managing inventory
@@ -65,9 +71,6 @@ Visit `http://127.0.0.1:8000/`.
 - Managing environment variables and secrets properly with django-environ
 - Building a theme system with CSS custom properties and localStorage
 - Writing clean, filterable querysets for search and category filtering
+- **Implementing an end-to-end e-commerce workflow (Cart to Order)**
+- **Handling complex business logic within Django Models (e.g., order totals and item calculations)**
 
-## Roadmap
-
-- [ ] Shopping cart and checkout
-- [ ] User accounts and order history
-- [ ] REST API with Django REST Framework
